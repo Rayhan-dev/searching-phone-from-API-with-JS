@@ -1,13 +1,39 @@
+let searchArea = document.getElementById('search_input');
 const show_results = () => {
-    let searchText = document.getElementById('search_input').value;
+    let searchText = searchArea.value;
     fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
         .then(response => response.json())
-        .then(data => veiwResults(data.data?data.data:'No phone found'));
+        .then(data => veiwResults(data.data));
 }
 const veiwResults = data => {
     const cardsDiv = document.getElementById('result_cards');
     cardsDiv.textContent = "";
     detailsDiv.textContent = '';
+    if (data.length == 0) {
+        const modalDiv = document.createElement('div');
+        modalDiv.innerHTML = `
+        <div class="modal modal-dialog modal-dialog-centered" id="myModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h3>No phone found named <h1>${searchArea.value}</h1></h3>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      `
+            ;
+        document.getElementById('main').appendChild(modalDiv);
+        var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+            keyboard: false
+        })
+        myModal.show();
+        searchArea.value = '';
+        
+    }else {
         for (let phones of data) {
             const card = document.createElement('div');
             card.classList = "col";
@@ -22,8 +48,10 @@ const veiwResults = data => {
             </div>
           `;
             cardsDiv.appendChild(card);  
+            searchArea.value = '';
         }
-         
+        console.log(data.slice(0, 20));
+    }     
 }
 const show_details = (slug) => {
     fetch(`https://openapi.programming-hero.com/api/phone/${slug}`)
@@ -65,7 +93,8 @@ const veiwDetails = (data) => {
     `;
    
     detailsDiv.appendChild(phoneDetails);
-    const sensors = data.mainFeatures.sensors?data.mainFeatures.sensors:'Sensor informations not available';
+    searchArea.value = '';
+    const sensors = data.mainFeatures.sensors;
     for (sensorName of sensors) {
         const sensorDiv = document.getElementById('sensor_div');
         console.log(sensorDiv);
