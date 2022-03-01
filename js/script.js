@@ -7,7 +7,6 @@ const show_results = () => {
 const veiwResults = data => {
     const cardsDiv = document.getElementById('result_cards');
     for (let phones of data) {
-        console.log(phones);
         const card = document.createElement('div');
         card.classList = "col";
         card.innerHTML = `
@@ -16,7 +15,7 @@ const veiwResults = data => {
             <div class="card-body">
                 <h5 class="card-title">Name: ${phones.phone_name} </h5>
                 <p class="card-text">Brand: ${phones.brand} </p>
-                <button type="button" class="btn btn-primary">Show details</button>
+                <button id="detailsBtn" onclick="show_details('${phones.slug}')" type="button" class="btn btn-primary">Show details</button>
             </div>
         </div>
       `;
@@ -24,3 +23,9 @@ const veiwResults = data => {
     }
      
 }
+const show_details = (slug) => {
+    fetch(`https://openapi.programming-hero.com/api/phone/${slug}`)
+        .then(response => response.json())
+        .then(data => console.log(data.data));
+}
+const veiwDetails = (data) => 
