@@ -1,0 +1,1 @@
+let inputText = document.getElementById('search_input');
