@@ -17,7 +17,7 @@ const veiwResults = data => {
     const cardsDiv = document.getElementById('result_cards');  //result div 
     cardsDiv.textContent = ""; 
     detailsDiv.textContent = '';
-    
+    // handling error with condition by array length 
     if (data.length == 0) {  
         spinnerStatus('block');
         const errorDiv = document.createElement('div');
@@ -31,7 +31,7 @@ const veiwResults = data => {
         cardsDiv.appendChild(errorDiv);
         searchArea.value = '';
         spinnerStatus('none');
-    } else {
+    } else { // handling error with condition by array length 
         spinnerStatus('block');
         document.getElementById('loadMoreDiv').textContent = '';
         for (let phones of data.slice(0, 20)) {
@@ -48,14 +48,16 @@ const veiwResults = data => {
                 </div>
             </div>
       `;
-        cardsDiv.appendChild(card);  
-        searchArea.value = '';
+        cardsDiv.appendChild(card); 
+        searchArea.value = ''; 
         }
+        //creating see more button 
         const LoadMoreDiv = document.getElementById('loadMoreDiv');
         const seeMoreButton = document.createElement('div');
         seeMoreButton.innerHTML = ` <button  class="btn btn-primary text-white my-5" id="SeeMoreBtn">Load More</button>`; 
         LoadMoreDiv.appendChild(seeMoreButton);
         const GetmoreBtn = document.getElementById('SeeMoreBtn');
+        // adding function to the see more button 
         GetmoreBtn.addEventListener('click', function () {
             spinnerStatus('block');
             cardsDiv.textContent = '';
@@ -84,7 +86,7 @@ const veiwResults = data => {
     spinnerStatus('none');
     }     
 
-    
+//getting details from API 
 const show_details = (slug) => {
     spinnerStatus('block');
     fetch(`https://openapi.programming-hero.com/api/phone/${slug}`)
@@ -92,6 +94,7 @@ const show_details = (slug) => {
         .then(data => veiwDetails(data.data));
 }
 const detailsDiv = document.getElementById('details_info');
+//showing detainls on UX
 const veiwDetails = (data) => { 
     detailsDiv.textContent = '';
     const phoneDetails = document.createElement('div');
